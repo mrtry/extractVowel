@@ -1,0 +1,9 @@
+test*
+*.raw
+*.lpc
+*.swp
+*.pyc
+*.txt
+*.png
+*~
+~.tmp
