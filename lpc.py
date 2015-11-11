@@ -42,7 +42,7 @@ def analysisLPC(file_name):
     s = s * hammingWindow
 
     # LPC係数を求める
-    lpcOrder = 32
+    lpcOrder = 60
     r = autocorr(s, lpcOrder + 1)
     a, e  = LevinsonDurbin(r, lpcOrder)
     print "*** result ***"

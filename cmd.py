@@ -36,16 +36,19 @@ def getPeak(hz,pw):
         if pw[i-1] < pw[i] and pw[i] > pw[i+1]:
             peaksPower.append(pw[i])
             peaksHz.append(hz[i])
-        if len(peaksPower) == 2:
+        if len(peaksPower) == 5:
             break
+    #print peaksHz
+    #print peaksPower
+
     return peaksPower
 
 def validateVowel(peaks):
     power = 0
-
-    for peak in peaks:
-        power = power + peak
-    print power
+    for i in range(1, len(peaks)):
+        power = power + peaks[i]
+    #print power
+    return power
 
 def fileWrite(data, fileName):
     f = open(fileName,'w')
