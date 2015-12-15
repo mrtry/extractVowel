@@ -18,8 +18,8 @@ if __name__ == "__main__":
         print "file type do not without wav."
         exit()
 
-    loglpcspec,fscale= lpc.analysisLPC(sys.argv[1])
+    loglpcspec,fscale= lpc.analysisLPC(sys.argv[1], False)
 
     peaksPower = cmd.getPeak(fscale, loglpcspec)
 
-    cmd.validateVowel(peaksPower)
+    print cmd.validateVowel(peaksPower)

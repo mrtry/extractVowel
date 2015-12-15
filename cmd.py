@@ -7,28 +7,63 @@ import sys
 import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
+import wave
+import shutil
+import glob
 
 def execute(cmd):
     os.system(cmd)
 
-def wav2raw(wav_file):
-    # wav->raw生成
-    cmd = "/usr/local/SPTK/bin/wav2raw %s" % sys.argv[1]
+# --- --- --- --- split Frame --- --- --- --- #
+def splitFrame(fileName):
+    wavFile = fileName + '.wav'
+    length = getFrame(wavFile)
+    loop = 1 + (int)(length / 4000)
+
+    x0 = 0
+    x1 = 4000
+    frameShift = 2000
+
+    wav2raw(wavFile)
+    rawFile = fileName + '.raw'
+    for i in range(0,loop):
+        splitedFileName = splitRaw(fileName, x0, x1)
+        x0 = x0 + frameShift
+        x1 = x1 + frameShift
+        raw2wav(splitedFileName)
+
+    mkdir('splitedWav')
+    for wavFileList in glob.glob('./splitedRaw/*.wav'):
+        shutil.move(wavFileList, 'splitedWav/')
+
+
+def getFrame(wavFile):
+    wav = wave.open(wavFile, "r")
+    return wav.getnframes()
+
+def splitRaw(fileName, x0, x1):
+    mkdir('splitedRaw')
+    splitedFileName = './splitedRaw/%s\(%s-%s\).raw' % (fileName, x0, x1)
+    cmd = 'bcut %s.raw -s %s -e %s > %s' % (fileName, x0, x1, splitedFileName)
     execute(cmd)
 
-def analysisLPC(file_name):
-    # LPC分析(20次)
-    cmd = "x2x +sf < %s.raw | frame -l 400 -p 80 | window -l 400 | /usr/local/SPTK/bin/lpc -l 400 -m 20 > %s.lpc" % (file_name, file_name)
+    return splitedFileName
+
+def mkdir(dirName):
+    if not os.path.exists(dirName):
+        os.mkdir(dirName)
+
+def wav2raw(fileName):
+    # wav->raw
+    cmd = "/usr/local/SPTK/bin/wav2raw %s" % fileName
     execute(cmd)
 
-def specLPC(file_name):
-    # LPCスペクトル
-    cmd = "bcut +f -n 20 -s 65 -e 65 < %s.lpc > %s.tmp" % (file_name, file_name)
+def raw2wav(fileName):
+    # raw -> wav
+    cmd = "/usr/local/SPTK/bin/raw2wav %s" % fileName
     execute(cmd)
 
-    cmd = "spec -l 512 -n 20 -p %s.tmp | dmp +f > %s_lpc.txt" % (file_name, file_name)
-    execute(cmd)
-
+# --- --- --- --- extract Formant --- --- --- --- #
 def getPeak(hz,pw):
     peaksHz = []
     peaksPower = []
@@ -38,17 +73,17 @@ def getPeak(hz,pw):
             peaksHz.append(hz[i])
         if len(peaksPower) == 5:
             break
-    #print peaksHz
-    #print peaksPower
-
     return peaksPower
 
 def validateVowel(peaks):
     power = 0
     for i in range(1, len(peaks)):
         power = power + peaks[i]
-    #print power
-    return power
+    if power >= 5:
+        return 0
+    return 1
+
+# --- --- --- --- wav read --- --- --- --- #
 
 def fileWrite(data, fileName):
     f = open(fileName,'w')

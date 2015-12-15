@@ -23,7 +23,7 @@ def preEmphasis(signal, p):
     # 係数 (1.0, -p) のFIRフィルタを作成
     return scipy.signal.lfilter([1.0, -p], 1, signal)
 
-def analysisLPC(file_name):
+def analysisLPC(file_name, showGraph):
     # 音声をロード
     wav, fs = wavread(file_name)
     t = np.arange(0.0, len(wav) / fs, 1/fs)
@@ -66,13 +66,8 @@ def analysisLPC(file_name):
     loglpcspec = 20 * np.log10(lpcspec)
     plot(fscale, loglpcspec[:nfft/2], "r", linewidth=2)
 
-    #fscale_str = cmd.encodeStr(fscale)
-    #loglpcspec_str = cmd.encodeStr(loglpcspec[:nfft/2])
-
-    #cmd.fileWrite(fscale_str,'fscale.txt')
-    #cmd.fileWrite(loglpcspec_str,'loglpcspec.txt')
-
     xlim((0, 10000))
-    show()
+    if showGraph == True:
+        show()
 
     return loglpcspec[:nfft/2].tolist(),fscale.tolist()
