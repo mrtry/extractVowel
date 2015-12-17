@@ -1,17 +1,6 @@
 #!/usr/bin/python
 #coding:utf-8
-# wavファイルからlpcスペクトルを生成するスクリプト
 
-import os
-import sys
-import subprocess
-import numpy as np
-import matplotlib.pyplot as plt
-import wave
-import shutil
-import glob
-
-# --- --- --- --- extract Formant --- --- --- --- #
 def getPeak(hz,pw):
     peaksHz = []
     peaksPower = []
