@@ -29,4 +29,5 @@
 
 ## Homage
 - [LPCの実装](http://aidiary.hatenablog.com/entry/20120415/1334458954)
-- [母音区間推定法](chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/http://www.splab.net/papers/2010/2010_17.pdf)
+- [母音区間推定法](http://www.splab.net/papers/2010/2010_17.pdf)
+
