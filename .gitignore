@@ -1,5 +1,6 @@
 test*
 *.raw
+*.wav
 *.lpc
 *.swp
 *.pyc
