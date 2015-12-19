@@ -3,6 +3,7 @@
 
 import os
 import sys
+import re
 import shutil
 
 def execute(cmd):
@@ -13,6 +14,9 @@ def mkdir(dirName):
         os.mkdir(dirName)
 
 def mv(fromHere, toThere):
+    fileName = re.sub('.*/','', fromHere)
+    if os.path.exists(toThere + fileName):
+        os.remove(toThere + fileName)
     shutil.move(fromHere,toThere)
 
 def wav2raw(fileName):
