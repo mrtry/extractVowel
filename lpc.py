@@ -1,17 +1,18 @@
 #coding:utf-8
-import codecs
 import cmd
 import wave
 import numpy as np
 import scipy.io.wavfile
 import scipy.signal
 import scipy.fftpack
-from pylab import *
+import pylab
 from levinson_durbin import autocorr, LevinsonDurbin
+import matplotlib.pyplot as plt
 
 """LPCスペクトル包絡を求める"""
-def wavread(file_name):
-    wf = wave.open(file_name, "r")
+
+def wavread(fileName):
+    wf = wave.open(fileName, "r")
     fs = wf.getframerate()
     x = wf.readframes(wf.getnframes())
     x = np.frombuffer(x, dtype="int16") / 32768.0  # (-1, 1)に正規化
@@ -23,9 +24,9 @@ def preEmphasis(signal, p):
     # 係数 (1.0, -p) のFIRフィルタを作成
     return scipy.signal.lfilter([1.0, -p], 1, signal)
 
-def analysisLPC(file_name, showGraph):
+def analysisLPC(fileName):
     # 音声をロード
-    wav, fs = wavread(file_name)
+    wav, fs = wavread(fileName)
     t = np.arange(0.0, len(wav) / fs, 1/fs)
 
     # 音声波形の中心部分を切り出す
@@ -42,12 +43,12 @@ def analysisLPC(file_name, showGraph):
     s = s * hammingWindow
 
     # LPC係数を求める
-    lpcOrder = 60
+    lpcOrder = 32
     r = autocorr(s, lpcOrder + 1)
     a, e  = LevinsonDurbin(r, lpcOrder)
-    print "*** result ***"
-    print "a:", a
-    print "e:", e
+    # print "*** result ***"
+    # print "a:", a
+    # print "e:", e
 
     # LPC係数の振幅スペクトルを求める
     nfft = 2048   # FFTのサンプル数
@@ -57,17 +58,16 @@ def analysisLPC(file_name, showGraph):
     # オリジナル信号の対数スペクトル
     spec = np.abs(np.fft.fft(s, nfft))
     logspec = 20 * np.log10(spec)
-    plot(fscale, logspec[:nfft/2])
+    plt.plot(fscale, logspec[:nfft/2])
 
     # LPC対数スペクトル
     w, h = scipy.signal.freqz(np.sqrt(e), a, nfft, "whole")
-    data = scipy.signal.freqz(np.sqrt(e), a, nfft, "whole")
     lpcspec = np.abs(h)
     loglpcspec = 20 * np.log10(lpcspec)
-    plot(fscale, loglpcspec[:nfft/2], "r", linewidth=2)
+    plt.plot(fscale, loglpcspec[:nfft/2], "r", linewidth=2)
 
-    xlim((0, 10000))
-    if showGraph == True:
-        show()
+    plt.xlim((0, 10000))
+    plt.savefig('graph/' + cmd.getFileName(fileName) + '.eps')
+    plt.clf()
 
     return loglpcspec[:nfft/2].tolist(),fscale.tolist()

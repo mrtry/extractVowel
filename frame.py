@@ -23,8 +23,13 @@ def splitFrame(fileName):
         cmd.raw2wav(splitedFileName)
 
     cmd.mkdir('splitedWav')
-    for wavFileList in glob.glob('./splitedRaw/*.wav'):
-        cmd.mv(wavFileList, 'splitedWav/')
+    beforeWavFileList = glob.glob('./splitedRaw/*.wav')
+    afterWavFileList = []
+
+    for wavFile in beforeWavFileList:
+        afterWavFileList.append(cmd.mv(wavFile, 'splitedWav/'))
+
+    return afterWavFileList
 
 def getFrame(wavFile):
     wav = wave.open(wavFile, "r")
