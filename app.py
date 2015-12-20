@@ -3,10 +3,10 @@
 
 import os
 import sys
-import cmd
-import formant
-import frame
-import lpc
+import modules.cmd as cmd
+import modules.formant as formant
+import modules.frame as frame
+import modules.lpc as lpc
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
