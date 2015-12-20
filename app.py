@@ -3,6 +3,9 @@
 
 import os
 import sys
+import time
+from progressbar import ProgressBar, Percentage, Bar, ETA
+
 import modules.cmd as cmd
 import modules.formant as formant
 import modules.frame as frame
@@ -26,11 +29,21 @@ if __name__ == "__main__":
     cmd.mkdir('splitedWav/vowels')
     cmd.mkdir('splitedWav/consonants')
 
+    widgets = ['InProgress:', Percentage(), '   |   ', ETA()]
+    progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
+    count = 0
+
     for wavFile in wavFileList:
         loglpcspec,fscale= lpc.analysisLPC(wavFile)
         peaksPower = formant.getPeak(fscale, loglpcspec)
+
         if formant.validateVowel(peaksPower) == 0:
             cmd.mv(wavFile, 'splitedWav/vowels/')
         else:
             cmd.mv(wavFile, 'splitedWav/consonants/')
+
+        count += 1
+        progress.update(count)
+        time.sleep(0.01)
+    progress.finish()
 
