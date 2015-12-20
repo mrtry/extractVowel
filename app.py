@@ -44,14 +44,14 @@ if __name__ == "__main__":
 
         for wavFile in wavFileList:
             loglpcspec,fscale= lpc.analysisLPC(wavFile)
-            peaksPower = formant.getPeak(fscale, loglpcspec)
+            peaksHz, peaksPower = formant.getPeaks(fscale, loglpcspec)
 
             filePath = '/' + re.sub('\(.*\)','',cmd.getFileName(wavFile)) + '/'
             for dirName in dirNameList:
                 if dirName != 'graph':
                     cmd.mkdir(dirName + filePath)
 
-            if formant.validateVowel(peaksPower) == 0:
+            if formant.validateVowel(peaksHz, peaksPower) == 0:
                 cmd.mv(wavFile, 'splitedWav/vowels/' + filePath)
                 cmd.mv('graph/' + cmd.getFileName(wavFile) + '.eps', 'graph/vowels/' + filePath)
 

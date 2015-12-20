@@ -1,27 +1,26 @@
 #!/usr/bin/python
 #coding:utf-8
 
-def getPeak(hz,pw):
+def getPeaks(hz,pw):
     peaksHz = []
     peaksPower = []
     for i in range(1, len(pw) - 1):
         if pw[i-1] < pw[i] and pw[i] > pw[i+1]:
-            peaksPower.append(pw[i])
             peaksHz.append(hz[i])
-        if len(peaksPower) == 5:
+            peaksPower.append(pw[i])
+        if len(peaksHz) == 3:
             break
-    return peaksPower
+    return peaksHz,peaksPower
 
-def validateVowel(peaks):
-    power = 0
-    for i in range(1, len(peaks)):
-        power = power + peaks[i]
-    if power >= 5:
-        return 0
-    return 1
+def validateVowel(peaksHz, peaksPower):
+    # print 'peaks[1]:' , peaksHz[0], peaksPower[0]
+    # print 'peaks[2]:' , peaksHz[1], peaksPower[1]
 
-def fileWrite(data, fileName):
-    f = open(fileName,'w')
-    for line in data:
-        f.write(line + '\n')
-    f.close()
+    if peaksHz[0] >= 200 and peaksHz[0] <= 1000:
+        if peaksHz[1] >= 900 and peaksHz[1] <= 3000:
+            power = peaksPower[0] + peaksPower[1]
+            if power > 0 :
+                return 0
+            else:
+                return 1
+
