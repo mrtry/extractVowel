@@ -38,7 +38,7 @@ if __name__ == "__main__":
         for dirName in dirNameList:
             cmd.mkdir(dirName)
 
-        widgets = ['[' + argv + '] InProgress:', Percentage(), '   |   ', ETA()]
+        widgets = ['[' + argv + ']    InProgress:', Percentage(), '   |   ', ETA()]
         progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
         count = 0
 
