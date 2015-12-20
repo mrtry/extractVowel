@@ -13,53 +13,55 @@ import modules.frame as frame
 import modules.lpc as lpc
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print "file not specify"
         exit()
 
-    fileName, ext = os.path.splitext(sys.argv[1])
+    for argv in sys.argv:
+        fileName, ext = os.path.splitext(argv)
 
-    if ext != ".wav":
-        print "file type do not without wav."
-        exit()
+        if ext != ".wav":
+            if not argv == sys.argv[0] :
+                print "file type do not without wav."
+            continue
 
-    wavFileList = frame.splitFrame(fileName)
+        wavFileList = frame.splitFrame(fileName)
 
-    dirNameList = [
-            'graph',
-            'graph/vowels',
-            'graph/consonants',
-            'splitedWav/vowels',
-            'splitedWav/consonants',
-        ]
+        dirNameList = [
+                'graph',
+                'graph/vowels',
+                'graph/consonants',
+                'splitedWav/vowels',
+                'splitedWav/consonants',
+            ]
 
-    for dirName in dirNameList:
-        cmd.mkdir(dirName)
-
-    widgets = ['InProgress:', Percentage(), '   |   ', ETA()]
-    progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
-    count = 0
-
-    for wavFile in wavFileList:
-        loglpcspec,fscale= lpc.analysisLPC(wavFile)
-        peaksPower = formant.getPeak(fscale, loglpcspec)
-
-        filePath = '/' + re.sub('\(.*\)','',cmd.getFileName(wavFile)) + '/'
         for dirName in dirNameList:
-            if dirName != 'graph':
-                cmd.mkdir(dirName + filePath)
+            cmd.mkdir(dirName)
 
-        if formant.validateVowel(peaksPower) == 0:
-            cmd.mv(wavFile, 'splitedWav/vowels/' + filePath)
-            cmd.mv('graph/' + cmd.getFileName(wavFile) + '.eps', 'graph/vowels/' + filePath)
+        widgets = ['[' + argv + '] InProgress:', Percentage(), '   |   ', ETA()]
+        progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
+        count = 0
 
-        else:
-            cmd.mv(wavFile, 'splitedWav/consonants/' + filePath)
-            cmd.mv('graph/' + cmd.getFileName(wavFile) + '.eps', 'graph/consonants/' + filePath)
+        for wavFile in wavFileList:
+            loglpcspec,fscale= lpc.analysisLPC(wavFile)
+            peaksPower = formant.getPeak(fscale, loglpcspec)
 
-        count += 1
-        progress.update(count)
-        time.sleep(0.01)
+            filePath = '/' + re.sub('\(.*\)','',cmd.getFileName(wavFile)) + '/'
+            for dirName in dirNameList:
+                if dirName != 'graph':
+                    cmd.mkdir(dirName + filePath)
 
-    progress.finish()
+            if formant.validateVowel(peaksPower) == 0:
+                cmd.mv(wavFile, 'splitedWav/vowels/' + filePath)
+                cmd.mv('graph/' + cmd.getFileName(wavFile) + '.eps', 'graph/vowels/' + filePath)
+
+            else:
+                cmd.mv(wavFile, 'splitedWav/consonants/' + filePath)
+                cmd.mv('graph/' + cmd.getFileName(wavFile) + '.eps', 'graph/consonants/' + filePath)
+
+            count += 1
+            progress.update(count)
+            time.sleep(0.01)
+
+        progress.finish()
 
