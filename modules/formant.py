@@ -16,8 +16,8 @@ def validateVowel(peaksHz, peaksPower):
     # print 'peaks[1]:' , peaksHz[0], peaksPower[0]
     # print 'peaks[2]:' , peaksHz[1], peaksPower[1]
 
-    if peaksHz[0] >= 200 and peaksHz[0] <= 1000:
-        if peaksHz[1] >= 900 and peaksHz[1] <= 3000:
+    if peaksHz[0] >= 250 and peaksHz[0] <= 1250:
+        if peaksHz[1] >= 750 and peaksHz[1] <= 2250:
             power = peaksPower[0] + peaksPower[1]
             if power > 0 :
                 return 0
