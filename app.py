@@ -25,6 +25,7 @@ if __name__ == "__main__":
                 print "file type do not without wav."
             continue
 
+        fileName = cmd.normalize(fileName)
         wavFileList = frame.splitFrame(fileName)
 
         dirNameList = [
@@ -38,7 +39,7 @@ if __name__ == "__main__":
         for dirName in dirNameList:
             cmd.mkdir(dirName)
 
-        widgets = ['[' + argv + ':extractFormant]    InProgress:', Percentage(), '   |   ', ETA()]
+        widgets = ['[' + fileName + ':extractFormant]    InProgress:', Percentage(), '   |   ', ETA()]
         progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
         count = 0
 
@@ -65,3 +66,6 @@ if __name__ == "__main__":
 
         progress.finish()
 
+    cmd.rm(argv + '.raw')
+    cmd.rm(fileName + '.wav')
+    cmd.rm(fileName + '.raw')

@@ -8,12 +8,17 @@ import shutil
 
 def execute(cmd):
     os.system(cmd)
+
 def getFileName(fileName):
     return re.sub('.*/','', fileName)
 
 def mkdir(dirName):
     if not os.path.exists(dirName):
         os.mkdir(dirName)
+
+def rm(fileName):
+    if os.path.exists(fileName):
+        os.remove(fileName)
 
 def mv(fromHere, toThere):
     fileName =getFileName(fromHere)
@@ -32,16 +37,9 @@ def raw2wav(fileName):
     cmd = "/usr/local/SPTK/bin/raw2wav %s" % fileName
     execute(cmd)
 
-def fileWrite(data, fileName):
-    f = open(fileName,'w')
-    for line in data:
-        f.write(line + '\n')
-    f.close()
+def normalize(fileName):
+    cmd = "sox %s.wav %s_normalize.wav gain -nl" % (fileName, fileName)
+    execute(cmd)
 
-def encodeFloat(list):
-    floatList = map(float, list)
-    return floatList
-
-def encodeStr(list):
-    strList = map(str, list)
-    return strList
+    fileName = "%s_normalize" % fileName
+    return fileName
