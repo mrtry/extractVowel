@@ -38,7 +38,7 @@ def raw2wav(fileName):
     execute(cmd)
 
 def normalize(fileName):
-    cmd = "sox %s.wav %s_normalize.wav gain -nl" % (fileName, fileName)
+    cmd = "sox %s.wav %s_normalize.wav norm" % (fileName, fileName)
     execute(cmd)
 
     fileName = "%s_normalize" % fileName
