@@ -12,19 +12,26 @@ def splitFrame(fileName):
     length = getFrameSize(wavFile)
     frameRate = getFramerate(wavFile)
 
-    x0 = 0
-    x1 = 0.25
-    frameShift = x1 / 2
-    loop = 1 + (int)(length / (frameRate / 4))
+    startTime = 0
+    endTime = 0.25
+    trimTime = 0.25
+    shift = trimTime / 2
+    endWavSec = (float)(length) / (float)(frameRate)
+    loop = 2 + (int)((endWavSec - trimTime) / shift)
 
     widgets = ['[' + wavFile + ':splitFrame]    InProgress:', Percentage(), '   |   ', ETA()]
     progress = ProgressBar(widgets=widgets, maxval=loop).start()
     count = 0
 
     for i in range(0,loop):
-        splitWav(fileName, x0, x1)
-        x0 = x0 + frameShift
-        x1 = x1 + frameShift
+        if endWavSec < endTime:
+            trimTime = endTime - startTime
+            splitWav(fileName, startTime, endWavSec, trimTime)
+            break
+
+        splitWav(fileName, startTime, endTime, trimTime)
+        startTime = startTime + shift
+        endTime = endTime + shift
 
         count += 1
         progress.update(count)
@@ -42,10 +49,10 @@ def getFramerate(wavFile):
     wav = wave.open(wavFile, "r")
     return wav.getframerate()
 
-def splitWav(fileName, x0, x1):
+def splitWav(fileName, startTime, endTime, trimTime):
     cmd.mkdir('splitedWav')
-    splitedFileName = './splitedWav/%s\(%s-%s\).wav' % (fileName, x0, x1)
-    call = 'sox %s.wav %s trim %s %s > /dev/null 2>&1' % (fileName, splitedFileName, x0 ,x1)
+    splitedFileName = './splitedWav/%s\(%s-%s\).wav' % (fileName, startTime, endTime)
+    call = 'sox %s.wav %s trim %s %s > /dev/null 2>&1' % (fileName, splitedFileName, startTime ,trimTime)
     cmd.execute(call)
 
     normalizedFile = cmd.normalize(splitedFileName)
