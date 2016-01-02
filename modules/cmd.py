@@ -21,25 +21,17 @@ def rm(fileName):
         os.remove(fileName)
 
 def mv(fromHere, toThere):
-    fileName =getFileName(fromHere)
+    fileName = getFileName(fromHere)
     if os.path.exists(toThere + fileName):
         os.remove(toThere + fileName)
     shutil.move(fromHere,toThere)
     return toThere + fileName
 
-def wav2raw(fileName):
-    # wav->raw
-    cmd = "/usr/local/SPTK/bin/wav2raw %s" % fileName
-    execute(cmd)
-
-def raw2wav(fileName):
-    # raw -> wav
-    cmd = "/usr/local/SPTK/bin/raw2wav %s" % fileName
-    execute(cmd)
-
 def normalize(fileName):
-    cmd = "sox %s.wav %s_normalize.wav norm" % (fileName, fileName)
+    fileName, ext = os.path.splitext(fileName)
+    normalizedFile = fileName + '_normalized.wav'
+    cmd = "sox %s.wav %s norm  > /dev/null 2>&1" % (fileName, normalizedFile)
     execute(cmd)
 
-    fileName = "%s_normalize" % fileName
-    return fileName
+    return normalizedFile
+

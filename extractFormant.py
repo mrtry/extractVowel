@@ -25,7 +25,6 @@ if __name__ == "__main__":
                 print "file type do not without wav."
             continue
 
-        fileName = cmd.normalize(fileName)
         wavFileList = frame.splitFrame(fileName)
 
         dirNameList = [
@@ -65,7 +64,3 @@ if __name__ == "__main__":
             time.sleep(0.01)
 
         progress.finish()
-
-    cmd.rm(argv + '.raw')
-    cmd.rm(fileName + '.wav')
-    cmd.rm(fileName + '.raw')

@@ -9,42 +9,32 @@ from progressbar import ProgressBar, Percentage, Bar, ETA
 
 def splitFrame(fileName):
     wavFile = fileName + '.wav'
-    length = getFrame(wavFile)
+    length = getFrameSize(wavFile)
     frameRate = getFramerate(wavFile)
 
     x0 = 0
-    x1 = frameRate / 4
+    x1 = 0.25
     frameShift = x1 / 2
     loop = 1 + (int)(length / (frameRate / 4))
-
-    cmd.wav2raw(wavFile)
-    rawFile = fileName + '.raw'
 
     widgets = ['[' + wavFile + ':splitFrame]    InProgress:', Percentage(), '   |   ', ETA()]
     progress = ProgressBar(widgets=widgets, maxval=loop).start()
     count = 0
 
     for i in range(0,loop):
-        splitedFileName = splitRaw(fileName, x0, x1)
+        splitWav(fileName, x0, x1)
         x0 = x0 + frameShift
         x1 = x1 + frameShift
-        cmd.raw2wav(splitedFileName)
 
         count += 1
         progress.update(count)
         time.sleep(0.01)
 
-    print ""
-    cmd.mkdir('splitedWav')
-    beforeWavFileList = glob.glob('./splitedRaw/*.wav')
-    afterWavFileList = []
+    wavFileList = glob.glob('./splitedWav/*.wav')
 
-    for wavFile in beforeWavFileList:
-        afterWavFileList.append(cmd.mv(wavFile, 'splitedWav/'))
+    return wavFileList
 
-    return afterWavFileList
-
-def getFrame(wavFile):
+def getFrameSize(wavFile):
     wav = wave.open(wavFile, "r")
     return wav.getnframes()
 
@@ -52,10 +42,12 @@ def getFramerate(wavFile):
     wav = wave.open(wavFile, "r")
     return wav.getframerate()
 
-def splitRaw(fileName, x0, x1):
-    cmd.mkdir('splitedRaw')
-    splitedFileName = './splitedRaw/%s\(%s-%s\).raw' % (fileName, x0, x1)
-    call = 'bcut %s.raw -s %s -e %s > %s' % (fileName, x0, x1, splitedFileName)
+def splitWav(fileName, x0, x1):
+    cmd.mkdir('splitedWav')
+    splitedFileName = './splitedWav/%s\(%s-%s\).wav' % (fileName, x0, x1)
+    call = 'sox %s.wav %s trim %s %s > /dev/null 2>&1' % (fileName, splitedFileName, x0 ,x1)
     cmd.execute(call)
 
-    return splitedFileName
+    normalizedFile = cmd.normalize(splitedFileName)
+    cmd.rm(splitedFileName.replace('\\', ''))
+
