@@ -18,7 +18,6 @@ def splitFrame(fileName):
     shift = trimTime / 2
     endWavSec = (float)(length) / (float)(frameRate)
     loop = 1 + (int)((endWavSec - trimTime) / shift)
-    print loop
 
     widgets = ['[' + wavFile + ':splitFrame]    InProgress:', Percentage(), '   |   ', ETA()]
     progress = ProgressBar(widgets=widgets, maxval=loop).start()
