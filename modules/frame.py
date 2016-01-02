@@ -27,6 +27,7 @@ def splitFrame(fileName):
         if endWavSec < endTime:
             trimTime = endTime - startTime
             splitWav(fileName, startTime, endWavSec, trimTime)
+            count += 1
             break
 
         splitWav(fileName, startTime, endTime, trimTime)
