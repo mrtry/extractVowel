@@ -27,11 +27,3 @@ def mv(fromHere, toThere):
     shutil.move(fromHere,toThere)
     return toThere + fileName
 
-def normalize(fileName):
-    fileName, ext = os.path.splitext(fileName)
-    normalizedFile = fileName + '_normalized.wav'
-    cmd = "sox %s.wav %s norm  > /dev/null 2>&1" % (fileName, normalizedFile)
-    execute(cmd)
-
-    return normalizedFile
-
