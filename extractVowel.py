@@ -12,16 +12,16 @@ import modules.formant as formant
 import modules.frame as frame
 import modules.lpc as lpc
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
+def extractVowel(fileNames):
+    if len(fileNames) < 2:
         print "file not specify"
         exit()
 
-    for argv in sys.argv:
-        fileName, ext = os.path.splitext(argv)
+    for fileName in fileNames:
+        fileName, ext = os.path.splitext(fileName)
 
         if ext != ".wav":
-            if not argv == sys.argv[0] :
+            if ext != ".py":
                 print "file type do not without wav."
             continue
 
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         for dirName in dirNameList:
             cmd.mkdir(dirName)
 
-        widgets = ['[' + fileName + ':extractFormant]    InProgress:', Percentage(), '   |   ', ETA()]
+        widgets = ['[' + fileName + '.wav :extractVowel]    InProgress:', Percentage(), '   |   ', ETA()]
         progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
         count = 0
 
@@ -64,3 +64,7 @@ if __name__ == "__main__":
             time.sleep(0.01)
 
         progress.finish()
+
+if __name__ == "__main__":
+    extractVowel(sys.argv)
+
