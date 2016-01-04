@@ -38,7 +38,7 @@ def extractVowel(fileNames):
         for dirName in dirNameList:
             cmd.mkdir(dirName)
 
-        widgets = ['[' + fileName + '.wav :extractVowel]    InProgress:', Percentage(), '   |   ', ETA()]
+        widgets = ['[' + fileName + '.wav : extractVowel]    InProgress:', Percentage(), '   |   ', ETA()]
         progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
         count = 0
 
