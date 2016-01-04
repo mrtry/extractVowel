@@ -51,6 +51,6 @@ def getFramerate(wavFile):
 def splitWav(fileName, startTime, endTime, trimTime):
     cmd.mkdir('splitedWav')
     splitedFileName = './splitedWav/%s\(%s-%s\).wav' % (fileName, startTime, endTime)
-    call = 'sox %s.wav %s trim %s %s > /dev/null 2>&1' % (fileName, splitedFileName, startTime ,trimTime)
+    call = 'sox %s.wav %s trim %s %s norm > /dev/null 2>&1' % (fileName, splitedFileName, startTime ,trimTime)
     cmd.execute(call)
 
