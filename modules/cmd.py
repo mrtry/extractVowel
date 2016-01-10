@@ -27,3 +27,10 @@ def mv(fromHere, toThere):
     shutil.move(fromHere,toThere)
     return toThere + fileName
 
+def norm(wavFileName):
+    normFile = '%s_norm' % wavFileName
+
+    cmd = 'sox %s.wav %s.wav norm > /dev/null 2>&1' % (wavFileName, normFile)
+    execute(cmd)
+    return normFile
+
