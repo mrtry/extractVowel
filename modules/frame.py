@@ -23,14 +23,14 @@ def splitFrame(fileName):
     progress = ProgressBar(widgets=widgets, maxval=loop).start()
     count = 0
 
-    normFile = cmd.norm(fileName)
+    convertedFile = cmd.convert(fileName)
 
     for i in range(0,loop):
         if endWavSec < endTime:
             count += 1
             break
 
-        splitWav(normFile, startTime, endTime, trimTime)
+        splitWav(convertedFile, startTime, endTime, trimTime)
         startTime = startTime + shift
         endTime = endTime + shift
 
