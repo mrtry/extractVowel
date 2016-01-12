@@ -13,8 +13,8 @@ def getPeaks(hz,pw, getPoints):
     return peaksHz,peaksPower
 
 def validateVowel(peaksHz, peaksPower):
-    if 250 <= peaksHz[0] <= 1250:
-        if 750 <= peaksHz[1] <= 2250:
+    if 300 <= peaksHz[0] <= 880:
+        if 700 <= peaksHz[1] <= 2600:
             power = peaksPower[0] + peaksPower[1]
             if power > 0 :
                 return 0
