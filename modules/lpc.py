@@ -58,13 +58,19 @@ def analysisLPC(fileName):
     # オリジナル信号の対数スペクトル
     spec = np.abs(np.fft.fft(s, nfft))
     logspec = 20 * np.log10(spec)
-    plt.plot(fscale, logspec[:nfft/2])
+    plt.plot(fscale, logspec[:nfft/2], label = 'FFT')
 
     # LPC対数スペクトル
     w, h = scipy.signal.freqz(np.sqrt(e), a, nfft, "whole")
     lpcspec = np.abs(h)
     loglpcspec = 20 * np.log10(lpcspec)
-    plt.plot(fscale, loglpcspec[:nfft/2], "r", linewidth=2)
+    plt.plot(fscale, loglpcspec[:nfft/2], "r", linewidth=2, label = 'Envelope')
+
+    plt.xticks(np.arange(0, 8000, 1000))
+    plt.xlabel('frequency[Hz]', fontsize = 10, fontname = 'serif')
+    plt.ylim([-120, 30])
+    plt.ylabel('Amplitude', fontsize = 10, fontname = 'serif')
+    plt.legend(loc = 'upper right')
 
     plt.xlim((0, 10000))
     plt.savefig('graph/' + cmd.getFileName(fileName) + '.eps')

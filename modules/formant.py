@@ -21,13 +21,13 @@ def getPeaks(hz,pw, threshold,getPoints):
     peaksHz = []
     peaksPower = []
 
-    for i in range(0, len(lowPointHz) - 1):
-       if highPointPower[i] - lowPointPower[i] >= threshold:
-          if highPointPower[i] - lowPointPower[i+1] >= threshold:
-             peaksHz.append(highPointHz[i])
-             peaksPower.append(highPointPower[i])
-       if len(peaksHz) == getPoints:
-          break
+    for i in range(0, len(highPointHz) - 1):
+        if highPointPower[i] - lowPointPower[i] >= threshold:
+            if highPointPower[i] - lowPointPower[i+1] >= threshold:
+                peaksHz.append(highPointHz[i])
+                peaksPower.append(highPointPower[i])
+        if len(peaksHz) == getPoints:
+            break
 
     return peaksHz,peaksPower
 
