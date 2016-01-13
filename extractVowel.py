@@ -42,9 +42,12 @@ def extractVowel(fileNames):
         progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
         count = 0
 
+        threshold = 4.0
+        point = 4
+
         for wavFile in wavFileList:
             loglpcspec,fscale= lpc.analysisLPC(wavFile)
-            peaksHz, peaksPower = formant.getPeaks(fscale, loglpcspec, 3)
+            peaksHz, peaksPower = formant.getPeaks(fscale, loglpcspec, threshold, point)
 
             filePath = '/' + re.sub('\(.*\)','',cmd.getFileName(wavFile)) + '/'
             for dirName in dirNameList:
