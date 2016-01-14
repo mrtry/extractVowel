@@ -1,6 +1,21 @@
 #!/usr/bin/python
 #coding:utf-8
 
+import numpy as np
+
+def intervalSum(hz, pw, x0, x1):
+    start = hz.index(filter((lambda x : x >= x0), hz)[0])
+    end = hz.index(filter((lambda x : x >= x1), hz)[0])
+
+    sum = 0.0
+    count = 0
+
+    for i in range(start, end):
+       sum += pw[i]
+       count += 1
+
+    return sum
+
 def getPeaks(hz,pw, threshold,getPoints):
     highPointHz = []
     highPointPower = []
