@@ -53,8 +53,8 @@ def validateVowel(peaksHz, peaksPower):
     except IndexError:
         return 1
 
-    if 300 <= peaksHz[0] <= 880:
-        if 700 <= peaksHz[1] <= 2600:
+    if 200 <= peaksHz[0] <= 1300:
+        if 700 <= peaksHz[1] <= 2300:
             power = peaksPower[0] + peaksPower[1]
             if power > 0 :
                 return 0
