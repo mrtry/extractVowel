@@ -69,7 +69,7 @@ def analysisLPC(fileName):
     plt.xticks(np.arange(0, 8000, 1000))
     plt.xlabel('frequency[Hz]', fontsize = 10, fontname = 'serif')
     plt.ylim([-120, 30])
-    plt.ylabel('Amplitude', fontsize = 10, fontname = 'serif')
+    plt.ylabel('Amplitude[dB]', fontsize = 10, fontname = 'serif')
     plt.legend(loc = 'upper right')
 
     plt.xlim((0, 10000))
