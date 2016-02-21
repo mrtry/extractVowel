@@ -13,8 +13,8 @@ def splitFrame(fileName):
     frameRate = getFramerate(wavFile)
 
     startTime = 0
-    endTime = 0.25
-    trimTime = 0.25
+    endTime = 0.025
+    trimTime = 0.025
     shift = trimTime / 2
     endWavSec = (float)(length) / (float)(frameRate)
     loop = 1 + (int)((endWavSec - trimTime) / shift)

@@ -17,6 +17,7 @@ def extractVowel(fileNames):
         print "file not specify"
         exit()
 
+    # コマンドライン引数の全てに対して処理をする
     for fileName in fileNames:
         fileName, ext = os.path.splitext(fileName)
 
@@ -25,6 +26,7 @@ def extractVowel(fileNames):
                 print "file type do not without wav."
             continue
 
+        # 入力ファイルを分割し，そのすべてのファイル名を取得
         wavFileList = frame.splitFrame(fileName)
 
         dirNameList = [
@@ -38,30 +40,38 @@ def extractVowel(fileNames):
         for dirName in dirNameList:
             cmd.mkdir(dirName)
 
+        # プログレスバーの初期設定
         widgets = ['[' + fileName + '.wav : extractVowel]    InProgress:', Percentage(), '   |   ', ETA()]
         progress = ProgressBar(widgets=widgets, maxval=len(wavFileList)).start()
         count = 0
 
+        # ピークと認定するための閾値,取得するピーク数
         threshold = 4.0
         point = 4
 
+        # 分割したすべてのファイルに対して行う
         for wavFile in wavFileList:
+            # LPC
             loglpcspec,fscale= lpc.analysisLPC(wavFile)
+            # ピークの周波数，パワーを取得
             peaksHz, peaksPower = formant.getPeaks(fscale, loglpcspec, threshold, point)
 
+            # ファイル名の取得
             filePath = '/' + re.sub('\(.*\)','',cmd.getFileName(wavFile)) + '/'
+
             for dirName in dirNameList:
                 if dirName != 'graph':
                     cmd.mkdir(dirName + filePath)
 
+            # 母音判定，分類
             if formant.validateVowel(peaksHz, peaksPower) == 0:
                 cmd.mv(wavFile, 'splitedWav/vowels/' + filePath)
                 cmd.mv('graph/' + cmd.getFileName(wavFile) + '.eps', 'graph/vowels/' + filePath)
-
             else:
                 cmd.mv(wavFile, 'splitedWav/consonants/' + filePath)
                 cmd.mv('graph/' + cmd.getFileName(wavFile) + '.eps', 'graph/consonants/' + filePath)
 
+            # プログレスバーの設定
             count += 1
             progress.update(count)
             time.sleep(0.01)
@@ -69,5 +79,6 @@ def extractVowel(fileNames):
         progress.finish()
 
 if __name__ == "__main__":
+    # コマンドライン引数を渡す
     extractVowel(sys.argv)
 
