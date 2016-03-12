@@ -1,4 +1,6 @@
 #coding:utf-8
+#参考:http://aidiary.hatenablog.com/entry/20120415/1334458954
+
 import cmd
 import wave
 import numpy as np

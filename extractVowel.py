@@ -1,5 +1,6 @@
 #!/usr/bin/python
 #coding:utf-8
+#入力wavをエンコード，分割し，母音とそれ以外で分類するプログラム
 
 import os
 import sys
@@ -17,7 +18,6 @@ def extractVowel(fileNames):
         print "file not specify"
         exit()
 
-    # コマンドライン引数の全てに対して処理をする
     for fileName in fileNames:
         fileName, ext = os.path.splitext(fileName)
 
@@ -51,12 +51,12 @@ def extractVowel(fileNames):
 
         # 分割したすべてのファイルに対して行う
         for wavFile in wavFileList:
-            # LPC
+            # 信号強度と周波数のリストを取得
             loglpcspec,fscale= lpc.analysisLPC(wavFile)
             # ピークの周波数，パワーを取得
             peaksHz, peaksPower = formant.getPeaks(fscale, loglpcspec, threshold, point)
 
-            # ファイル名の取得
+            # 分割したファイル名の取得
             filePath = '/' + re.sub('\(.*\)','',cmd.getFileName(wavFile)) + '/'
 
             for dirName in dirNameList:

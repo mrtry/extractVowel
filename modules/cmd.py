@@ -1,5 +1,6 @@
 #!/usr/bin/python
 #coding:utf-8
+#API的なもの
 
 import os
 import sys
@@ -30,9 +31,9 @@ def mv(fromHere, toThere):
 def convert(wavFileName):
     convertedFile = '%s_converted' % wavFileName
 
+    #16kHz，モノラルにエンコード
     cmd = 'sox %s.wav -r 16000 -c 1 %s.wav norm> /dev/null 2>&1' % (wavFileName, convertedFile)
     execute(cmd)
 
     return convertedFile
-
 

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 #coding:utf-8
+#wavを分割するプログラム
 
 import wave
 import cmd
@@ -19,12 +20,14 @@ def splitFrame(fileName):
     endWavSec = (float)(length) / (float)(frameRate)
     loop = 1 + (int)((endWavSec - trimTime) / shift)
 
+    #プログレスバーの設定
     widgets = ['[' + wavFile + ' : splitFrame]    InProgress:', Percentage(), '   |   ', ETA()]
     progress = ProgressBar(widgets=widgets, maxval=loop).start()
     count = 0
 
     convertedFile = cmd.convert(fileName)
 
+    #wavファイルを分割
     for i in range(0,loop):
         if endWavSec < endTime:
             count += 1
